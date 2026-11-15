@@ -1,0 +1,121 @@
+{{define "reservations.html"}}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ski-Reservierungssystem</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1>Ski-Verleih</h1>
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/skis">Ski-Verwaltung</a></li>
+                <li><a href="/persons">Personen</a></li>
+                <li><a href="/reservations">Reservierungen</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+<div class="container">
+    <h2>Reservierungen</h2>
+
+    {{if .Error}}
+    <div class="alert alert-error">{{.Error}}</div>
+    {{end}}
+
+    <div class="form-section">
+        <h3>Neue Ausleihe</h3>
+        <form action="/reservations/create" method="POST" class="form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="ski_id">Ski auswählen:</label>
+                    <select id="ski_id" name="ski_id" required>
+                        <option value="">Bitte wählen</option>
+                        {{range .AvailableSkis}}
+                        <option value="{{.ID}}">{{.ID}} - {{.Brand}} {{.Model}} ({{.Length}}cm)</option>
+                        {{end}}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="person_id">Person auswählen:</label>
+                    <select id="person_id" name="person_id" required>
+                        <option value="">Bitte wählen</option>
+                        {{range .Persons}}
+                        <option value="{{.ID}}">{{.FirstName}} {{.LastName}} ({{.Mobile}})</option>
+                        {{end}}
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success">Ski ausleihen</button>
+        </form>
+    </div>
+
+    <div class="table-section">
+        <h3>Aktive Ausleihen ({{len .Reservations}})</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Reservierungs-ID</th>
+                    <th>Ski</th>
+                    <th>Person</th>
+                    <th>Mobiltelefon</th>
+                    <th>Ausgeliehen am</th>
+                    <th>Aktionen</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{range .Reservations}}
+                <tr>
+                    <td>{{.Reservation.ID}}</td>
+                    <td>
+                        {{if .Ski}}
+                        {{.Ski.ID}} - {{.Ski.Brand}} {{.Ski.Model}} ({{.Ski.Length}}cm)
+                        {{else}}
+                        -
+                        {{end}}
+                    </td>
+                    <td>
+                        {{if .Person}}
+                        {{.Person.FirstName}} {{.Person.LastName}}
+                        {{else}}
+                        -
+                        {{end}}
+                    </td>
+                    <td>
+                        {{if .Person}}
+                        {{.Person.Mobile}}
+                        {{else}}
+                        -
+                        {{end}}
+                    </td>
+                    <td>{{.Reservation.RentDate.Format "02.01.2006 15:04"}}</td>
+                    <td>
+                        <form action="/reservations/return?id={{.Reservation.ID}}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-success btn-sm">Zurückgeben</button>
+                        </form>
+                    </td>
+                </tr>
+                {{else}}
+                <tr>
+                    <td colspan="6" class="text-center">Keine aktiven Ausleihen</td>
+                </tr>
+                {{end}}
+            </tbody>
+        </table>
+    </div>
+</div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 TopRent</p>
+    </footer>
+</body>
+</html>
+{{end}}

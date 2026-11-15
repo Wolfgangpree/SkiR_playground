@@ -1,0 +1,65 @@
+{{define "index.html"}}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ski-Reservierungssystem</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <h1>Ski-Verleih</h1>
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/skis">Ski-Verwaltung</a></li>
+                <li><a href="/persons">Personen</a></li>
+                <li><a href="/reservations">Reservierungen</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+<div class="container">
+    <h2>Dashboard</h2>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>Verfügbare Ski</h3>
+            <p class="stat-number">{{.AvailableCount}}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Ausgeliehene Ski</h3>
+            <p class="stat-number">{{.RentedCount}}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Gesamt Ski</h3>
+            <p class="stat-number">{{.TotalSkis}}</p>
+        </div>
+
+        <div class="stat-card">
+            <h3>Registrierte Personen</h3>
+            <p class="stat-number">{{.TotalPersons}}</p>
+        </div>
+    </div>
+
+    <div class="quick-actions">
+        <h3>Schnellzugriff</h3>
+        <div class="button-group">
+            <a href="/skis" class="btn btn-primary">Ski verwalten</a>
+            <a href="/persons" class="btn btn-primary">Personen verwalten</a>
+            <a href="/reservations" class="btn btn-success">Neue Ausleihe</a>
+        </div>
+    </div>
+</div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 TopRent</p>
+    </footer>
+</body>
+</html>
+{{end}}
